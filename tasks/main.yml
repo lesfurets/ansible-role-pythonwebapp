@@ -1,0 +1,59 @@
+---
+- name: Ensure git is installed
+  apt:
+    name: git
+    state: present
+  when: ansible_os_family == "Debian"
+
+- name: Ensure git is installed
+  yum:
+    name: git
+    state: present
+  when: ansible_os_family == "RedHat"
+
+- name: Clone project
+  git:
+    repo: "{{ webapp_repo_url }}"
+    clone: true
+    dest: "{{ webapp_dest_folder }}"
+    version: "{{ webapp_scm_revision }}"
+
+- name: Ensure permissions on webapp install
+  file:
+    path: "{{ webapp_dest_folder }}"
+    state: directory
+    owner: "{{ webapp_user | default('root') }}"
+    group: "{{ webapp_user | default('root') }}"
+    recurse: true
+  changed_when: false    # fix for idempotency
+
+- name: Install system dependencies
+  import_tasks: install.redhat.yml
+  when: ansible_os_family == 'RedHat'
+
+- name: Install webapp dependencies
+  pip:
+    executable: pip3
+    requirements: "{{ webapp_requirements }}"
+
+- name: Copy settings file
+  copy:
+    src: "{{ webapp_settings_file_path }}"
+    dest: "{{ webapp_dest_folder }}"
+  when: webapp_settings_file_path | length > 0
+
+- name: Create systemd service file
+  template:
+    src: webapp.service.j2
+    dest: "/etc/systemd/system/{{ webapp_name }}.service"
+
+- name: Start webapp service
+  systemd:
+    name: "{{ webapp_name }}.service"
+    enabled: true
+    daemon-reload: true
+    state: started
+
+- name: Setup nginx
+  import_role:
+    name: lesfurets.nginx

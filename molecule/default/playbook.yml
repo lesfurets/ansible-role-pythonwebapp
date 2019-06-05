@@ -1,0 +1,37 @@
+---
+- name: Converge
+  hosts: all
+  vars:
+    webapp_repo_url: "https://github.com/lesfurets/demo-flask-uwsgi.git"
+    webapp_scm_revision: "v2"
+    webapp_ini_file: "{{ webapp_dest_folder }}/demo.ini"
+    webapp_settings_file_path: "settings.py"
+    webapp_user: "webapp"
+    nginx_capable_user: "webapp"
+    nginx_remove_default_vhost: true
+    nginx_vhosts:
+      - listen: "80"
+        server_name: "mywebapp.com"
+        locations:
+          - location: "/"
+            include: "uwsgi_params"
+            uwsgi_pass: "unix://{{ webapp_dest_folder }}/demo.sock"
+  roles:
+    - role: lesfurets.epel
+      when: ansible_os_family == 'RedHat'
+    - role: lesfurets.python3
+  tasks:
+    - name: create webapp user
+      user:
+        name: webapp
+        state: present
+    - name: setup webapp
+      import_role:
+        name: ansible-role-pythonwebapp
+- name: Prepare for tests
+  hosts: all
+  tasks:
+    - name: Install curl
+      package:
+        name: curl
+        state: present

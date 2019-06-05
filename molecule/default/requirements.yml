@@ -1,0 +1,4 @@
+---
+- src: lesfurets.epel
+- src: lesfurets.python3
+- src: lesfurets.nginx

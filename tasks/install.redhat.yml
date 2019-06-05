@@ -1,0 +1,7 @@
+---
+- name: Install dependencies
+  yum:
+    name:
+      - python36-devel
+      - gcc
+    state: present

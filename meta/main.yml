@@ -1,0 +1,29 @@
+---
+galaxy_info:
+  author: Maxime GASTON
+  role_name: pythonwebapp
+  description: Python web applications (django, flask...) setup with uwsgi/nginx
+  company: LesFurets.com
+  issue_tracker_url: https://github.com/lesfurets/ansible-role-pythonwebapp
+  license: GPLv3
+  min_ansible_version: 2.4
+  platforms:
+    - name: EL
+      versions:
+        - 7
+    - name: Debian
+      versions:
+        - stretch
+    - name: Ubuntu
+      versions:
+        - xenial
+        - bionic
+  galaxy_tags:
+    - development
+    - python
+    - web
+    - django
+    - flask
+    - uwsgi
+  dependencies:
+    - role: 'lesfurets.python3'

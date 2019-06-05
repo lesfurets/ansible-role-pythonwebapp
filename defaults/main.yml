@@ -1,0 +1,9 @@
+---
+webapp_name: "webapp"
+webapp_dest_folder: "/usr/local/{{ webapp_name }}"
+webapp_repo_url: ""
+webapp_scm_revision: "HEAD"    # tag/branch to use on git clone
+#                                avoid using head as it will break idempotence
+webapp_requirements: "{{ webapp_dest_folder }}/requirements.txt"
+webapp_ini_file: "{{ webapp_dest_folder: }}/wgsi.ini"
+webapp_settings_file_path: ""    # local path for settings file

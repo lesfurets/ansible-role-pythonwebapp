@@ -1,0 +1,12 @@
+[Unit]
+Description=uWSGI instance to serve {{ webapp_name }}
+After=network.target
+
+[Service]
+User={{ webapp_user | default('root') }}
+Group={{ webapp_user | default('root') }}
+WorkingDirectory={{ webapp_dest_folder }}
+ExecStart=/usr/local/bin/uwsgi --ini {{ webapp_ini_file }}
+
+[Install]
+WantedBy=multi-user.target
