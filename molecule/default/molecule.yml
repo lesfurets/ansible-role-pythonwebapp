@@ -7,25 +7,25 @@ lint:
   name: yamllint
 platforms:
   - name: centos7
-    image: centos/systemd
+    image: notsag/centos-systemd:7
     command: /sbin/init
     privileged: true
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
   - name: ubuntu16
-    image: jrei/systemd-ubuntu:16.04
+    image: notsag/ubuntu-systemd:16.04
     command: /sbin/init
     privileged: true
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
   - name: ubuntu18
-    image: jrei/systemd-ubuntu:18.04
+    image: notsag/ubuntu-systemd:18.04
     command: /sbin/init
     privileged: true
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
   - name: debian9
-    image: jrei/systemd-debian:9
+    image: notsag/debian-systemd:9
     command: /lib/systemd/systemd
     privileged: true
     volumes:
