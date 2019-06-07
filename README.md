@@ -41,10 +41,37 @@ nginx_vhosts:
 	locations:
 	  - location: "/"
 	    include: "uwsgi_params"
-	    uwsgi_pass: "{{ webapp_dest_folder }}/{{ webapp_name }}.sock"
+        uwsgi_pass: "unix://{{ webapp_dest_folder }}/demo.sock"
 ```
 
 ## Example Playbook
+
+```
+- hosts: webapp
+  vars:
+    webapp_repo_url: "https://github.com/lesfurets/demo-flask-uwsgi.git"
+    webapp_scm_revision: "v2"
+    webapp_ini_file: "{{ webapp_dest_folder }}/demo.ini"
+    webapp_settings_file_path: "settings.py"
+    webapp_user: "webapp"
+    nginx_capable_user: "webapp"
+    nginx_remove_default_vhost: true
+    nginx_vhosts:
+      - listen: "80"
+        server_name: "mywebapp.com"
+        locations:
+          - location: "/"
+            include: "uwsgi_params"
+            uwsgi_pass: "unix://{{ webapp_dest_folder }}/demo.sock"
+  tasks:
+    - name: create webapp user
+      user:
+        name: webapp
+        state: present
+    - name: setup webapp
+      import_role:
+        name: lesfurets.pythonwebapp
+```
 
 ## License
 
